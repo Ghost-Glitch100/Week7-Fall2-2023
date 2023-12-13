@@ -10,8 +10,10 @@ import SwiftUI
 struct VideoListView: View {
     //MARK: PROPERTIES
     
-    @State private var videos: [Video] = Bundle.main.decode("videos.json")
     
+    @State private var videos: [Video] = VideoAfricanData().getAnimalVido()
+    @State private var selectedVideo: Video? = nil
+    var Video = VideoPlayerView(videoSelected: "", videoTitle: "")
     
     //MARK: BODY
     var body: some View {
@@ -20,6 +22,9 @@ struct VideoListView: View {
                 ForEach(videos) { item in
                     VideoListItemView(video: item)
                         .padding(.vertical, 8)
+                        .onTapGesture {
+                            selectedVideo = item
+                        }
                 }
             }
             .navigationTitle("Videos")
@@ -33,10 +38,15 @@ struct VideoListView: View {
                     })
                 }
             }
+            if let selectedVideo = selectedVideo {
+                VideoPlayerView(videoSelected: selectedVideo.id, videoTitle: selectedVideo.name)
+            }
         }
     }
 }
 
-#Preview {
-    VideoListView()
+struct VideoListView_Previews: PreviewProvider {
+    static var previews: some View {
+        VideoListView()
+    }
 }
